@@ -1,4 +1,4 @@
-/*!   This is example01.500beams.data.split source file for
+/*!   This is the template source file for
 !       https://github.com/LiuGangKingston/C-CSV-TIKZ.git
 !            Version 1.0
 !   free for non-commercial use.
@@ -14,10 +14,9 @@
 !        Shiwei Huang (huang937@gmail.com)
 !   Copyright (c) 2021
 !
-!   This file is formed by adding new lines at the
+!   To use this, you can add your code at the
 !   "Specific calculation to generate CSV files" area in the
-!   functin "void MyComputing() {...}" at the end of the
-!   template file.
+!   functin "void MyComputing() {...}" at the end of this file.
 ! */
 
 
@@ -444,7 +443,7 @@ void MyComputing() {
 // Specific calculation to generate CSV files
 // Specific calculation to generate CSV files
 
-    int i, j, k, groupnumber, totallines, datalinesineachfile, startingline;
+/*    int i, j, k, groupnumber, totallines, datalinesineachfile, startingline;
     double  refractiveindex, bigradius , a ,b , z, anglez, c, anglea, incidentangle;
     double  refractiveangle, anglede, dx, ee, et, ex, ey, anglece, angleced, outangle;
     FILE *  afile;
@@ -501,6 +500,6 @@ void MyComputing() {
                   et, ex, ey, anglece, angleced, outangle, PickTikZColor(i) );
 
     }
-    FileGroupClose(groupnumber);
+    FileGroupClose(groupnumber);  */
 
 }

@@ -135,15 +135,31 @@
   struct CCSVTikZFileNamePrefixes *       CCSVTikZFileNamePrefixTemp2;
 
 
+void Initialize();
+void Finalize();
+
+
 void CCSVTikZFileGroupInitialize()
 {    TotalCCSVTikZFileGroupsSetup = 0;
      TotalCCSVTikZFileNamePrefixes = 0;
      HeadOfCCSVTikZFileGroups = (struct CCSVTikZFileGroups*)
                    malloc(sizeof(struct CCSVTikZFileGroups));
+     if(HeadOfCCSVTikZFileGroups == NULL){
+        printf("In CCSVTikZFileGroupInitialize()  \n");
+        printf("memory allocation for HeadOfCCSVTikZFileGroups failed, then stopped. \n");
+        Finalize();
+        exit(0);
+     }
      HeadOfCCSVTikZFileGroups->GroupFiles = NULL;
      HeadOfCCSVTikZFileGroups->NextFileGroup = NULL;
      HeadOfCCSVTikZFileNamePrefixes = (struct CCSVTikZFileNamePrefixes*)
                          malloc(sizeof(struct CCSVTikZFileNamePrefixes));
+     if(HeadOfCCSVTikZFileNamePrefixes == NULL){
+        printf("In CCSVTikZFileGroupInitialize()  \n");
+        printf("memory allocation for HeadOfCCSVTikZFileNamePrefixes failed, then stopped. \n");
+        Finalize();
+        exit(0);
+     }
      HeadOfCCSVTikZFileNamePrefixes->NamePrefix = NULL;
      HeadOfCCSVTikZFileNamePrefixes->NextPrefixes = NULL;
 }
@@ -191,11 +207,6 @@ void CCSVTikZFileGroupPointer(int GroupNumber){
          CCSVTikZFileGroupTemp1 = CCSVTikZFileGroupTemp2;
      }
 }
-
-void Initialize();
-void Finalize();
-
-
 
 
 void FileGroupSetupAndOpen(int GroupNumber, char * FileNamePrefix,
@@ -278,8 +289,24 @@ void FileGroupSetupAndOpen(int GroupNumber, char * FileNamePrefix,
 
      CCSVTikZFileNamePrefixTemp2 = (struct CCSVTikZFileNamePrefixes*)
                       malloc(sizeof(struct CCSVTikZFileNamePrefixes));
+     if(CCSVTikZFileNamePrefixTemp2 == NULL){
+        printf("In the FileGroupSetupAndOpen(int GroupNumber, char * FileNamePrefix,");
+        printf("               int StartingLine, int EndingLine, int LinesInEachFile)\n");
+        printf("with the GroupNumber %d , \n", GroupNumber);
+        printf("memory allocation for CCSVTikZFileNamePrefixTemp2 failed, then stopped. \n");
+        Finalize();
+        exit(0);
+     }
      CCSVTikZFileNamePrefixTemp2->ItsGroupNumber = GroupNumber;
      existname = (char *) malloc((prelen+10)*sizeof(char));
+     if(existname == NULL){
+        printf("In the FileGroupSetupAndOpen(int GroupNumber, char * FileNamePrefix,");
+        printf("               int StartingLine, int EndingLine, int LinesInEachFile)\n");
+        printf("with the GroupNumber %d , \n", GroupNumber);
+        printf("memory allocation for existname failed, then stopped. \n");
+        Finalize();
+        exit(0);
+     }
      strcpy(existname,FileNamePrefix);
      CCSVTikZFileNamePrefixTemp2->NamePrefix = existname;
      CCSVTikZFileNamePrefixTemp2->NextPrefixes = NULL;
@@ -306,10 +333,26 @@ void FileGroupSetupAndOpen(int GroupNumber, char * FileNamePrefix,
         TotalCCSVTikZFileGroupsSetup = GroupNumber;
         CCSVTikZFileGroupTemp1 = (struct CCSVTikZFileGroups*)
                     malloc(sizeof(struct CCSVTikZFileGroups));
+        if(CCSVTikZFileGroupTemp1 == NULL){
+           printf("In the FileGroupSetupAndOpen(int GroupNumber, char * FileNamePrefix,");
+           printf("               int StartingLine, int EndingLine, int LinesInEachFile)\n");
+           printf("with the GroupNumber %d , \n", GroupNumber);
+           printf("memory allocation for CCSVTikZFileGroupTemp1 failed, then stopped. \n");
+           Finalize();
+           exit(0);
+        }
         CCSVTikZFileGroupTemp1->NextFileGroup = NULL;
         CCSVTikZFileGroupTemp2->NextFileGroup = CCSVTikZFileGroupTemp1;
      }
      tempfiles = (FILE **) malloc(tfiles * sizeof(FILE *));
+     if(tempfiles == NULL){
+        printf("In the FileGroupSetupAndOpen(int GroupNumber, char * FileNamePrefix,");
+        printf("               int StartingLine, int EndingLine, int LinesInEachFile)\n");
+        printf("with the GroupNumber %d , \n", GroupNumber);
+        printf("memory allocation for tempfiles failed, then stopped. \n");
+        Finalize();
+        exit(0);
+     }
      CCSVTikZFileGroupTemp1->GroupFiles = tempfiles;
      CCSVTikZFileGroupTemp1->TotalLinesInEachFile = LinesInEachFile;
      CCSVTikZFileGroupTemp1->TotalFiles = tfiles;
@@ -321,17 +364,32 @@ void FileGroupSetupAndOpen(int GroupNumber, char * FileNamePrefix,
      CCSVTikZFileGroupTemp1->LineNumberDirection = -1;
 
      fullfilename = (char *) malloc((prelen+strlen(CCSVTikZFileExtension)+40)*sizeof(char));
+     if(fullfilename == NULL){
+        printf("In the FileGroupSetupAndOpen(int GroupNumber, char * FileNamePrefix,");
+        printf("               int StartingLine, int EndingLine, int LinesInEachFile)\n");
+        printf("with the GroupNumber %d , \n", GroupNumber);
+        printf("memory allocation for fullfilename failed, then stopped. \n");
+        Finalize();
+        exit(0);
+     }
      for(i=0; i < tfiles; i++) {
          itoa((i+1), intaschar, 10);
          strcpy(fullfilename, FileNamePrefix);
          strcat(fullfilename, intaschar);
          strcat(fullfilename, CCSVTikZFileExtension);
          tempfiles[i] = fopen(fullfilename,"w");
+         if(tempfiles[i] == NULL){
+            printf("In the FileGroupSetupAndOpen(int GroupNumber, char * FileNamePrefix,");
+            printf("               int StartingLine, int EndingLine, int LinesInEachFile)\n");
+            printf("with the GroupNumber %d , \n", GroupNumber);
+            printf("File open for %s failed, then stopped. \n", fullfilename);
+            Finalize();
+            exit(0);
+        }
          printf("File %s is opened as number %d in GroupNumber %d . \n", fullfilename, i+1, GroupNumber);
          //fprintf(tempfiles[i], "%s . \n \n", fullfilename);
      }
      free(fullfilename);
-
 
 }
 
@@ -464,6 +522,12 @@ void MyComputing() {
     anglea=acos(c/bigradius)*Rad2Deg;
 
     afile = fopen("setup.scalars.csv", "w");
+    if(afile == NULL){
+       printf("In the function MyComputing()\n");
+       printf("File open for setup.scalars.csv failed, then stopped. \n");
+       Finalize();
+       exit(0);
+    }
     fprintf(afile, "totallines,refractiveindex,bigradius,a,b,z,anglez,c,anglea\n");
     fprintf(afile, "%d, %f, %f, %f, %f, %f, %f, %f, %f \n", totallines, refractiveindex,
                                                    bigradius, a, b, z, anglez, c, anglea);

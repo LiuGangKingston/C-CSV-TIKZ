@@ -1,4 +1,4 @@
-/*!   This is example01.500beams.data.split source file for
+/*!   This is example02.ellipsoidal source file for
 !       https://github.com/LiuGangKingston/C-CSV-TIKZ.git
 !            Version 1.0
 !   free for non-commercial use.

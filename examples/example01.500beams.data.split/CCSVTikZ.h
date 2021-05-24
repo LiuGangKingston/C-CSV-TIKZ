@@ -381,7 +381,8 @@ void FileGroupSetupAndOpen(int GroupNumber, char * FileNamePrefix,
         exit(0);
      }
      for(i=0; i < tfiles; i++) {
-         itoa((i+1), intaschar, 10);
+         //itoa((i+1), intaschar, 10);
+         sprintf(intaschar,"%d",i+1);
          strcpy(fullfilename, FileNamePrefix);
          strcat(fullfilename, intaschar);
          strcat(fullfilename, CCSVTikZFileExtension);
